@@ -1,17 +1,18 @@
 export interface Budget {
-  id: string;
+  id?: string;
   nome: string;
   email: string;
-  phone?: string;
-  service: string;
-  message?: string;
-  createdAt: string;
-  status: "pending" | "in_review" | "done";
-  tipoProjeto: string;
+  descricao: string;
+  statusId?: string;
+  status?: {
+    id?: string,
+    name: string,
+    description: string
+  }
+  typeId?: string;
   type?: {
     id: string;
     value: string;
     description: string;
   };
-  typeId?: string;
 }

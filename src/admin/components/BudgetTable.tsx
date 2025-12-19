@@ -1,72 +1,80 @@
 import { Badge } from "lucide-react";
 import type { Budget } from "../types/Budget";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import ModalFormAddNewStatus from "./ModalFormAddNewStatus";
 
 interface Props {
   budgets: Budget[];
-  onSelect: (id: string) => void;
 }
 
-export function BudgetTable({ budgets, onSelect }: Props) {
+
+export function BudgetTable({ budgets }: Props) {
+
   return (
+    <motion.div
+      initial={{
+        opacity:0.3,
+        y:5
+      }}
+      animate={{
+        opacity:1,
+        y:0
+      }}
+    >
     <table className="w-full border-collapse text-sm">
       <thead>
-        <tr className="border-b bg-neutral-50">
-          <th className="text-left p-2">Nome</th>
-          <th className="text-left p-2">Serviço</th>
-          <th className="text-left p-2">Data</th>
-          <th className="text-left p-2">Status</th>
+        <tr className="border-b bg-neutral-50 dark:bg-zinc-700">
+          <th className="text-left p-2">Nome </th>
+          <th className="text-left p-2 items-center">
+            Serviço 
+          </th>
+          <th className="text-left p-2 flex gap-4 items-center">
+            Status 
+            <ModalFormAddNewStatus />
+          </th>
           <th className="text-left p-2">Ações</th>
         </tr>
       </thead>
 
       <tbody>
-        {budgets.map((b) => (
-          <tr key={b.id} className="border-b hover:bg-neutral-50">
+        {budgets.map((b,index:any) => (
+          <tr key={index} className="border-b hover:bg-neutral-50 dark:hover:bg-zinc-600">
             <td className="p-2">{b.nome}</td>
-            <td className="p-2">{b.service}</td>
-            <td className="p-2">
-              {new Date(b.createdAt).toLocaleDateString("pt-BR")}
+            <td className="p-2">{b.type?.value}</td>
+            <td className="p-2 dark:text-white">
+              <div className="flex items-center gap-2">
+                <Badge color={handleBudgetIconColor(b)}></Badge>
+                <p>
+                  {b.status?.name}
+                </p>
+              </div>
             </td>
             <td className="p-2">
-              <Badge>{formatStatus(b.status)}</Badge>
-            </td>
-            <td className="p-2">
-              <button
-                onClick={() => onSelect(b.id)}
-                className="text-neutral-900 underline"
+              <Link
+                to={'/admin/budgets/' + b.id}
+                className="text-neutral-900 dark:text-white"
               >
                 Ver
-              </button>
+              </Link>
             </td>
           </tr>
         ))}
       </tbody>
     </table>
+    </motion.div>
   );
 }
-
-function formatStatus(status: string) {
-  switch (status) {
-    case "pending":
-      return "Pendente";
-    case "in_review":
-      return "Em análise";
-    case "done":
-      return "Concluído";
+function handleBudgetIconColor(b:Budget) {
+  switch (b.status?.name) {
+    case "Pendente":
+      return "red"
+    case "Em análise":
+        return "yelow"
+    case "Concluído":
+      return "green"
     default:
-      return status;
+      return "white"
   }
 }
 
-function getStatusVariant(status: string) {
-  switch (status) {
-    case "pending":
-      return "secondary";
-    case "in_review":
-      return "default";
-    case "done":
-      return "outline";
-    default:
-      return "outline";
-  }
-}

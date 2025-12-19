@@ -1,44 +1,67 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getbudgetStatus, getBudgetStatusDetail } from "../services/budgetStatusService";
+import type { Budget } from "../types/Budget";
+import { motion } from "framer-motion";
+import { getBudgets } from "../services/budgetsService";
+import type { Status } from "../types/Status";
 
 interface Props {
-  onFilter: (filters: { search: string; status: string }) => void;
+  budgets: Budget[],
+  setBudgets: (budgets:Budget[]) => void
 }
-
-export function BudgetFilters({ onFilter }: Props) {
+export function BudgetFilters({  setBudgets }: Props) {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
+  const [statusList, setstatusList] = useState<Status[] | null>()
 
-  function applyFilters() {
-    onFilter({ search, status });
-  }
 
+  useEffect(() => {
+    handleGetStatus()
+  }, [])
+  
+  useEffect(() => { 
+    handleFilterByStatus(status)
+  }, [status])
+  
   return (
-    <div className="flex items-center gap-4 mb-4">
+    <motion.div className="flex items-center gap-4 mb-4 w-full"
+    initial={{
+      opacity: 0.5
+    }}
+    animate={{
+      opacity:1
+    }}
+    >
       <input
         type="text"
         placeholder="Buscar por nome ou email"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="border p-2 rounded w-60"
-      />
-
+        className="border p-2 rounded w-60 flex-1 "
+        />
       <select
         value={status}
         onChange={(e) => setStatus(e.target.value)}
-        className="border p-2 rounded"
+        className="p-2 rounded dark:bg-zinc-800"
       >
-        <option value="">Todos</option>
-        <option value="pending">Pendente</option>
-        <option value="in_review">Em análise</option>
-        <option value="done">Concluído</option>
+        <option defaultValue={""} value="default">selecionar</option>
+        {statusList && statusList.map((stat)=>(
+          <option key={stat.id} value={stat.id}>{stat.name}</option>
+        ))}
       </select>
-
-      <button
-        onClick={applyFilters}
-        className="bg-neutral-900 text-white px-4 py-2 rounded hover:bg-neutral-800"
-      >
-        Filtrar
-      </button>
-    </div>
+    </motion.div>
   );
+
+  async function handleGetStatus() {
+   setstatusList( await getbudgetStatus())
+  }
+
+  async function handleFilterByStatus(id:string){
+    if (status === "default") {
+      setBudgets(await getBudgets())
+    }else{
+      const response = await getBudgetStatusDetail(id)
+      setBudgets(response.budgets!)
+    }
+  }
 }

@@ -5,7 +5,6 @@ import { ProtectedRoute } from "./admin/router/ProtectedRoute";
 
 import BudgetsList from "./admin/pages/Budgets/BudgetsList";
 import BudgetView from "./admin/pages/Budgets/BudgetView";
-import Dashboard from "./admin/pages/Dashboard";
 import Error from "./admin/pages/Error";
 
 export const router = createBrowserRouter([
@@ -14,7 +13,6 @@ export const router = createBrowserRouter([
     element: <LoginPage />,
     errorElement: <Error />,
   },
-
   {
     path: "/admin",
     element: (
@@ -23,9 +21,8 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      { index: true, element: <Dashboard /> },
+      { index: true, element: <BudgetsList /> },
       { path: "budgets/:id", element: <BudgetView /> },
-      { path: "budgets/", element: <BudgetsList /> },
     ],
   },
 ]);

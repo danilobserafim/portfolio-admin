@@ -2,7 +2,7 @@ import axios from "axios";
 import type { Budget } from "../types/Budget";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_BASEURL,
 });
 
 export async function getBudgets() {
@@ -10,7 +10,7 @@ export async function getBudgets() {
   return data;
 }
 
-export async function getBudget(id: string) {
+export async function getBudgetDetails(id: string) {
   const { data } = await api.get<Budget>(`/budgets/${id}`);
   return data;
 }

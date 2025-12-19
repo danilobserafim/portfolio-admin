@@ -2,7 +2,8 @@ import { ArrowLeft, Trash2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../components/Spinner";
-import { deleteBudget, getBudget } from "../../services/budgetsService";
+import { deleteBudget, getBudgetDetails } from "../../services/budgetsService";
+import { motion } from "framer-motion";
 
 export default function BudgetView() {
   const { id } = useParams();
@@ -10,12 +11,21 @@ export default function BudgetView() {
   const navigate = useNavigate();
   useEffect(() => {
     (async () => {
-      id && setBudget(await getBudget(id));
+      id && setBudget(await getBudgetDetails(id));
     })();
   }, []);
 
   return budget ? (
-    <div className="">
+    <motion.div className=""
+     initial={{
+      opacity:0.5,
+      y:3
+    }}
+    animate={{
+      opacity:1,
+      y:0
+    }}
+    >
       <div className="flex items-center gap-2">
         <button
           onClick={() => window.history.back()}
@@ -55,7 +65,7 @@ export default function BudgetView() {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   ) : (
     <Spinner />
   );

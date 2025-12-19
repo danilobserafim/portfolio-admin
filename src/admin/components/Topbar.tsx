@@ -9,8 +9,8 @@ export default function Topbar() {
   }
 
   return (
-    <header className="w-full h-16 bg-white border-b flex items-center justify-between px-4 dark:bg-zinc-900 dark:text-white dark:border-b-zinc-700">
-      <h1 className="text-lg font-semibold">Painel Admin</h1>
+    <header className="w-full h-16 bg-white border-b flex items-center px-8 justify-between px-4 dark:bg-zinc-900 dark:text-white dark:border-b-zinc-700">
+      <h1 className="text-lg font-semibold">Dashboard</h1>
 
       <button
         onClick={logout}
