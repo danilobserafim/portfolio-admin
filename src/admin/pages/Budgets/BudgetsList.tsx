@@ -14,7 +14,7 @@ export default function BudgetsList() {
   }, []);
 
   return (
-    <>
+    <div className="max-w-[1200px] m-auto">
       <BudgetFilters budgets={budgets} setBudgets={setBudgets} />
       {!isLoading ? 
         <>
@@ -22,7 +22,7 @@ export default function BudgetsList() {
         </>:
         <Spinner />
           }
-      </>
+      </div>
   )
   async function handleGetData() {
     setBudgets([]);

@@ -1,37 +1,37 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const token = localStorage.getItem("auth_token");
-    token && navigate("/admin");
+    const token = localStorage.getItem('auth_token');
+    token && navigate('/admin');
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
 
     await new Promise((res) => setTimeout(res, 800));
 
-    if (email === "danilob.serafim@gmail.com" && password === "123456") {
-      localStorage.setItem("auth_token", "valid_token");
-      navigate("/admin");
+    if (email === 'danilob.serafim@gmail.com' && password === '123456') {
+      localStorage.setItem('auth_token', 'valid_token');
+      navigate('/admin');
     } else {
-      setError("Credenciais inválidas");
+      setError('Credenciais inválidas');
     }
     setLoading(false);
   }
 
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-gray-100 px-4 dark:bg-zinc-900">
-      <div className="w-full max-w-sm bg-white shadow-md rounded-xl p-8 dark:bg-zinc-800 dark:text-white">
+    <div className="w-full h-screen flex items-center justify-center bg-gray-100 px-4 dark:bg-gray-900">
+      <div className="w-full max-w-sm bg-white shadow-md rounded-xl p-8 dark:bg-gray-800 dark:text-white">
         <h1 className="text-xl font-bold text-center mb-6">
           Acesso Administrativo
         </h1>
@@ -68,7 +68,7 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-70"
           >
-            {loading ? "Entrando..." : "Entrar"}
+            {loading ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
       </div>

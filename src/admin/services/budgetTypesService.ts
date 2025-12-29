@@ -1,12 +1,17 @@
-import axios from "axios";
-import type { Budget } from "../types/Budget";
+import axios from 'axios';
+import type { Budget } from '../types/Budget';
+import type { Type } from '../types/type';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASEURL,
 });
 
+export async function postbudgetType(type: Type) {
+  const { data } = await api.post('/budget-types', type);
+  return data;
+}
 export async function getbudgetTypes() {
-  const { data } = await api.get<Budget[]>("/budget-types");
+  const { data } = await api.get<Budget[]>('/budget-types');
   return data;
 }
 

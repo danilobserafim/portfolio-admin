@@ -1,15 +1,15 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 export default function Topbar() {
   const navigate = useNavigate();
 
   function logout() {
-    localStorage.removeItem("auth_token");
-    navigate("/");
+    localStorage.removeItem('auth_token');
+    navigate('/');
   }
 
   return (
-    <header className="w-full h-16 bg-white border-b flex items-center px-8 justify-between px-4 dark:bg-zinc-900 dark:text-white dark:border-b-zinc-700">
+    <header className="w-full h-16 bg-white border-b flex items-center justify-between px-4 dark:bg-gray-900 dark:text-white dark:border-b-gray-700">
       <h1 className="text-lg font-semibold">Dashboard</h1>
 
       <button

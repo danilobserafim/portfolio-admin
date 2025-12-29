@@ -1,30 +1,39 @@
-import { ArrowLeft, Trash2Icon } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import Spinner from "../../components/Spinner";
-import { deleteBudget, getBudgetDetails } from "../../services/budgetsService";
-import { motion } from "framer-motion";
+import { ArrowLeft, Trash2Icon } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import Spinner from '../../components/Spinner';
+import {
+  deleteBudget,
+  getBudgetDetails,
+  updateBudgetStatus,
+} from '../../services/budgetsService';
+import { motion } from 'framer-motion';
+import { getBudgetStatus } from '../../services/budgetStatusService';
+import type { Status } from '../../types/Status';
 
 export default function BudgetView() {
   const { id } = useParams();
   const [budget, setBudget] = useState<any>();
+  const [statusList, setStatusList] = useState<Status[]>([]);
   const navigate = useNavigate();
   useEffect(() => {
     (async () => {
+      setStatusList(await getBudgetStatus());
       id && setBudget(await getBudgetDetails(id));
     })();
   }, []);
 
   return budget ? (
-    <motion.div className=""
-     initial={{
-      opacity:0.5,
-      y:3
-    }}
-    animate={{
-      opacity:1,
-      y:0
-    }}
+    <motion.div
+      className=" max-w-[1200px] m-auto"
+      initial={{
+        opacity: 0.5,
+        y: 3,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
     >
       <div className="flex items-center gap-2">
         <button
@@ -39,7 +48,7 @@ export default function BudgetView() {
         </h2>
       </div>
 
-      <div className=" rounded-lg p-6 space-y-4 border border-zinc-700 relative bg-transparent">
+      <div className=" rounded-lg p-6 space-y-4 border border-gray-700 relative bg-transparent">
         <p>
           <strong>Nome:</strong> {budget.nome}
         </p>
@@ -56,7 +65,27 @@ export default function BudgetView() {
             {budget.descricao}
           </p>
         </div>
-        <div className="absolute right-4 top-4">
+        <div className="absolute right-4 top-4 flex gap-2">
+          <select
+            name="status"
+            id="status"
+            className="border rounded px-2 border-gray-700"
+            onChange={(e) =>
+              handleUpdateBudgetStatus(budget.id, e.target.value)
+            }
+          >
+            <optgroup className="dark:bg-gray-700" label="Status">
+              {statusList?.map((status) => (
+                <option
+                  key={status.id}
+                  value={status.id}
+                  selected={status.id === budget.statusId}
+                >
+                  {status.name}
+                </option>
+              ))}
+            </optgroup>
+          </select>
           <button
             className=" hover:bg-red-600 p-1 rounded-sm flex transition-all hover:text-red-50 cursor-pointer"
             onClick={() => handleRemove(id!)}
@@ -69,11 +98,14 @@ export default function BudgetView() {
   ) : (
     <Spinner />
   );
+  async function handleUpdateBudgetStatus(id: string, statusId: string) {
+    await updateBudgetStatus(id, statusId);
+  }
   async function handleRemove(id: string) {
-    const confirmed = confirm("Deseja mesmo remover o item?");
+    const confirmed = confirm('Deseja mesmo remover o item?');
     if (confirmed) {
       await deleteBudget(id);
-      navigate("/admin/budgets");
+      navigate('/admin');
     }
   }
 }

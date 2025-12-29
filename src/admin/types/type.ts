@@ -1,11 +1,8 @@
 import type { Budget } from './Budget';
 
-export interface Status {
+export interface Type {
   id?: string;
-  name: string;
+  value: string;
   description: string;
-  _count?: {
-    budgets: number;
-  };
   budgets?: Budget[];
 }

@@ -1,4 +1,4 @@
-import { RefreshCcwIcon } from "lucide-react";
+import { RefreshCcwIcon } from 'lucide-react';
 
 export default function Spinner() {
   return (
