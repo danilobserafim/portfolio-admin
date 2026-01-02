@@ -19,7 +19,7 @@ export default function BudgetView() {
   useEffect(() => {
     (async () => {
       setStatusList(await getBudgetStatus());
-      setBudget(await getBudgetDetails(id));
+      id && setBudget(await getBudgetDetails(id));
     })();
   }, []);
 
